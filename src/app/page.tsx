@@ -760,13 +760,26 @@ export default function Page() {
 
             <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '12px' }}>Recursos recomendados</div>
             {[
-              { title: 'Meditación', duration: '10 min', icon: '🧘' },
-              { title: 'Respiración', duration: '5 min', icon: '💨' },
-              { title: 'Journaling', duration: '15 min', icon: '📔' },
+              { title: 'Meditación', duration: '10 min', icon: 'lotus', bgColor: '#d5f2e9', iconColor: '#35a48e' },
+              { title: 'Respiración', duration: '5 min', icon: 'wind', bgColor: '#eff2ff', iconColor: '#6f93eb' },
+              { title: 'Journaling', duration: '15 min', icon: 'book', bgColor: '#e9e8ff', iconColor: '#886bff' },
             ].map((resource, idx) => (
               <div key={idx} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '12px 16px', marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: 'var(--shadow-4dp)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <div style={{ fontSize: '20px' }}>{resource.icon}</div>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: resource.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    {resource.icon === 'lotus' && (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="3"/><path d="M12 9V3M15 15l4.24-4.24M19 19h6M9 15l-4.24-4.24M5 19H-1M9 9l-4.24 4.24M3 5H-3M15 9l4.24 4.24M21 5h6"/></svg>
+                    )}
+                    {resource.icon === 'wind' && (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9.59 4.59A2 2 0 1 1 16 8H2m0 2h16a2 2 0 1 0 1.41-3.41M3 12h14m-8 4h8a2 2 0 0 0 2-2"/></svg>
+                    )}
+                    {resource.icon === 'book' && (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+                    )}
+                  </div>
                   <div>
                     <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-default)' }}>{resource.title}</div>
                     <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{resource.duration}</div>
@@ -834,7 +847,11 @@ export default function Page() {
                     }}
                   >
                     <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-                      <div style={{ fontSize: '32px' }}>{course.emoji}</div>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: course.category === 'tech' ? '#dee5fb' : '#d5f2e9', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={course.category === 'tech' ? '#496be3' : '#35a48e'} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                        </svg>
+                      </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)' }}>{course.title}</div>
                         <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{course.subtitle}</div>
@@ -849,7 +866,12 @@ export default function Page() {
                     </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '8px' }}>
                       <span>{course.duration}</span>
-                      <span>⭐ {course.rating}</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#f0b623" stroke="#f0b623" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                          <polygon points="12 2 15.09 10.26 23.77 10.36 17.13 16.17 19.09 24.95 12 19.27 4.91 24.95 6.87 16.17 0.23 10.36 8.91 10.26 12 2"/>
+                        </svg>
+                        {course.rating}
+                      </span>
                     </div>
                     <div style={{ backgroundColor: 'var(--neutral-100)', borderRadius: '4px', height: '4px', marginBottom: '8px', overflow: 'hidden' }}>
                       <div style={{ backgroundColor: 'var(--humand-500)', width: `${course.progress}%`, height: '100%' }} />
@@ -876,7 +898,11 @@ export default function Page() {
                       marginBottom: '24px',
                     }}
                   >
-                    <div style={{ fontSize: '48px', marginBottom: '12px' }}>{courses.find((c) => c.id === selectedCourse)?.emoji}</div>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                      </svg>
+                    </div>
                     <div style={{ fontSize: '18px', fontWeight: '600' }}>{courses.find((c) => c.id === selectedCourse)?.title}</div>
                   </div>
 
@@ -969,7 +995,23 @@ export default function Page() {
                     }}
                   >
                     <div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                      <div style={{ fontSize: '32px' }}>{benefit.emoji}</div>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: benefit.category === 'gastronomia' ? '#fce7d8' : benefit.category === 'cine' ? '#e9e8ff' : '#dee5fb', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                        {benefit.category === 'gastronomia' && (
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e9582b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M6.5 12c0 2.76 1.76 5.12 4.24 6.12.7.3 1.26 1.06 1.26 1.88 0 1.1-.9 2-2 2-.55 0-1.05-.23-1.4-.6m10.68-10.4c1.1 0 2 .9 2 2 0 .82-.56 1.58-1.26 1.88C16.88 16.88 15.12 19.24 12.36 19.24c-1.1 0-2-.9-2-2M9.5 9h5M3 12h18M5 12c0-.55.45-1 1-1h10c.55 0 1 .45 1 1s-.45 1-1 1H6c-.55 0-1-.45-1-1z"/>
+                          </svg>
+                        )}
+                        {benefit.category === 'cine' && (
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#886bff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                          </svg>
+                        )}
+                        {benefit.category === 'shopping' && (
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#496be3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                          </svg>
+                        )}
+                      </div>
                       <div style={{ flex: 1 }}>
                         <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)' }}>{benefit.name}</div>
                         <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{benefit.brand}</div>
@@ -990,7 +1032,11 @@ export default function Page() {
               {benefits.find((b) => b.id === selectedBenefit) && (
                 <div style={{ padding: '16px' }}>
                   <div style={{ backgroundColor: 'var(--red-500)', color: 'white', borderRadius: '8px', padding: '32px 16px', textAlign: 'center', marginBottom: '24px' }}>
-                    <div style={{ fontSize: '48px', marginBottom: '12px' }}>{benefits.find((b) => b.id === selectedBenefit)?.emoji}</div>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '12px' }}>
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                      </svg>
+                    </div>
                     <div style={{ fontSize: '18px', fontWeight: '600', marginBottom: '8px' }}>{benefits.find((b) => b.id === selectedBenefit)?.discount} OFF</div>
                     <div style={{ fontSize: '14px', opacity: 0.9 }}>{benefits.find((b) => b.id === selectedBenefit)?.name}</div>
                   </div>
@@ -1123,10 +1169,10 @@ export default function Page() {
           <div style={{ padding: '24px 16px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
               {[
-                { name: 'Trivia General', emoji: '🧠' },
-                { name: 'Adivina el Emoji', emoji: '🤔' },
-                { name: 'Humand Wordle', emoji: '📝' },
-                { name: 'Versus 1v1', emoji: '⚔️' },
+                { name: 'Trivia General', icon: 'brain', bgColor: '#e9e8ff', iconColor: '#886bff' },
+                { name: 'Adivina el Emoji', icon: 'puzzle', bgColor: '#fce7d8', iconColor: '#e9582b' },
+                { name: 'Humand Wordle', icon: 'grid', bgColor: '#dee5fb', iconColor: '#496be3' },
+                { name: 'Versus 1v1', icon: 'zap', bgColor: '#fde3e3', iconColor: '#e74444' },
               ].map((game, idx) => (
                 <div
                   key={idx}
@@ -1142,7 +1188,27 @@ export default function Page() {
                     boxShadow: 'var(--shadow-4dp)',
                   }}
                 >
-                  <div style={{ fontSize: '40px' }}>{game.emoji}</div>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '8px', backgroundColor: game.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {game.icon === 'brain' && (
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={game.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9.59 4.59A2 2 0 1 1 16 8H2m0 2h16a2 2 0 1 0 1.41-3.41M3 12h14m-8 4h8a2 2 0 0 0 2-2"/></svg>
+                    )}
+                    {game.icon === 'puzzle' && (
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={game.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M7.21 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-2.29"/><path d="M9 3v6m6-6v6m-3 3h5a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-5m0-12a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2m0-8V3m0 0h-2.5A2.5 2.5 0 0 0 3 5.5V9"/>
+                      </svg>
+                    )}
+                    {game.icon === 'grid' && (
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={game.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/>
+                      </svg>
+                    )}
+                    {game.icon === 'zap' && (
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={game.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                      </svg>
+                    )}
+                  </div>
                   <div style={{ fontSize: '14px', fontWeight: '600', textAlign: 'center', color: 'var(--text-default)' }}>{game.name}</div>
                 </div>
               ))}
@@ -1166,10 +1232,10 @@ export default function Page() {
             <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '12px' }}>Recetas saludables</div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
               {[
-                { name: 'Bowl de Quinoa', emoji: '🥗' },
-                { name: 'Smoothie Verde', emoji: '🥤' },
-                { name: 'Wrap de Pollo', emoji: '🌯' },
-                { name: 'Avena Overnight', emoji: '🥣' },
+                { name: 'Bowl de Quinoa', icon: 'salad', bgColor: '#e6fbe9', iconColor: '#28c040' },
+                { name: 'Smoothie Verde', icon: 'cup', bgColor: '#d5f2e9', iconColor: '#35a48e' },
+                { name: 'Wrap de Pollo', icon: 'utensils', bgColor: '#fce7d8', iconColor: '#e9582b' },
+                { name: 'Avena Overnight', icon: 'bowl', bgColor: '#fdfaec', iconColor: '#f0b623' },
               ].map((recipe, idx) => (
                 <div
                   key={idx}
@@ -1185,7 +1251,28 @@ export default function Page() {
                     boxShadow: 'var(--shadow-4dp)',
                   }}
                 >
-                  <div style={{ fontSize: '32px' }}>{recipe.emoji}</div>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: recipe.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {recipe.icon === 'salad' && (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recipe.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M7 21H4a2 2 0 0 1-2-2V9m16-6h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3m0-18V5a2 2 0 0 0-2-2h-2.5a2 2 0 0 0-1 .27L9 5M3 9h18M3 13h18"/>
+                      </svg>
+                    )}
+                    {recipe.icon === 'cup' && (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recipe.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M6 4h12v7a6 6 0 0 1-6 6 6 6 0 0 1-6-6V4z"/><line x1="6" y1="4" x2="18" y2="4"/><path d="M9 21a3 3 0 0 0 3-3 3 3 0 0 0 3 3"/>
+                      </svg>
+                    )}
+                    {recipe.icon === 'utensils' && (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recipe.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 2v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V2"/><path d="M17 2v7c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V2"/><path d="M9 15c1.1 0 2 .9 2 2v5c0 .6-.4 1-1 1h-2c-.6 0-1-.4-1-1v-5c0-1.1.9-2 2-2z"/>
+                      </svg>
+                    )}
+                    {recipe.icon === 'bowl' && (
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={recipe.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="13" r="8"/><path d="M12 13v8m-8-8h16M4 5h16"/>
+                      </svg>
+                    )}
+                  </div>
                   <div style={{ fontSize: '12px', fontWeight: '500', textAlign: 'center', color: 'var(--text-default)' }}>{recipe.name}</div>
                 </div>
               ))}
@@ -1193,12 +1280,28 @@ export default function Page() {
 
             <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '12px' }}>Recursos de salud</div>
             {[
-              { title: 'Ergonomía', description: 'Postura y bienestar en el trabajo', icon: '🪑' },
-              { title: 'Sueño saludable', description: 'Consejos para descansar mejor', icon: '😴' },
-              { title: 'Hidratación', description: 'Bebe agua, vive saludable', icon: '💧' },
+              { title: 'Ergonomía', description: 'Postura y bienestar en el trabajo', icon: 'monitor', bgColor: '#dee5fb', iconColor: '#496be3' },
+              { title: 'Sueño saludable', description: 'Consejos para descansar mejor', icon: 'moon', bgColor: '#e9e8ff', iconColor: '#886bff' },
+              { title: 'Hidratación', description: 'Bebe agua, vive saludable', icon: 'droplet', bgColor: '#dee5fb', iconColor: '#496be3' },
             ].map((resource, idx) => (
               <div key={idx} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '12px 16px', marginBottom: '8px', display: 'flex', gap: '12px', boxShadow: 'var(--shadow-4dp)' }}>
-                <div style={{ fontSize: '24px' }}>{resource.icon}</div>
+                <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: resource.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {resource.icon === 'monitor' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+                    </svg>
+                  )}
+                  {resource.icon === 'moon' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                  )}
+                  {resource.icon === 'droplet' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/>
+                    </svg>
+                  )}
+                </div>
                 <div>
                   <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-default)' }}>{resource.title}</div>
                   <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{resource.description}</div>
@@ -1223,7 +1326,7 @@ export default function Page() {
           <div style={{ padding: '16px' }}>
             {communities.map((community) => (
               <div key={community.id} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '16px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '12px', boxShadow: 'var(--shadow-4dp)' }}>
-                <div style={{ fontSize: '32px' }}>{community.emoji}</div>
+                <div style={{ width: '44px', height: '44px', borderRadius: '12px', backgroundColor: 'var(--neutral-50)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px', flexShrink: 0 }}>{community.emoji}</div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)' }}>{community.name}</div>
                   <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{community.members} miembros</div>
@@ -1288,12 +1391,28 @@ export default function Page() {
 
             <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '12px' }}>Recursos financieros</div>
             {[
-              { title: 'Presupuesto 101', description: 'Aprende a gestionar tu dinero', icon: '📊' },
-              { title: 'Inversiones básicas', description: 'Primeros pasos en inversiones', icon: '📈' },
-              { title: 'Deudas inteligentes', description: 'Maneja tus deudas de forma inteligente', icon: '💳' },
+              { title: 'Presupuesto 101', description: 'Aprende a gestionar tu dinero', icon: 'barchart', bgColor: '#fdfaec', iconColor: '#f0b623' },
+              { title: 'Inversiones básicas', description: 'Primeros pasos en inversiones', icon: 'trendingup', bgColor: '#e6fbe9', iconColor: '#28c040' },
+              { title: 'Deudas inteligentes', description: 'Maneja tus deudas de forma inteligente', icon: 'creditcard', bgColor: '#dee5fb', iconColor: '#496be3' },
             ].map((resource, idx) => (
               <div key={idx} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '12px 16px', marginBottom: '8px', display: 'flex', gap: '12px', boxShadow: 'var(--shadow-4dp)' }}>
-                <div style={{ fontSize: '24px' }}>{resource.icon}</div>
+                <div style={{ width: '40px', height: '40px', borderRadius: '8px', backgroundColor: resource.bgColor, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {resource.icon === 'barchart' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                    </svg>
+                  )}
+                  {resource.icon === 'trendingup' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                  )}
+                  {resource.icon === 'creditcard' && (
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={resource.iconColor} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                  )}
+                </div>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-default)' }}>{resource.title}</div>
                   <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{resource.description}</div>
