@@ -645,44 +645,63 @@ export default function Page() {
         </div>
       </div>
 
-      <div style={{ padding: '16px', backgroundColor: '#3b4eb8', marginLeft: '16px', marginRight: '16px', marginTop: '16px', borderRadius: '8px', cursor: 'pointer', color: 'white' }}>
-        <div style={{ fontSize: '16px', fontWeight: '600', marginBottom: '8px' }}>🏃 Humand Run Challenge</div>
-        <div style={{ fontSize: '12px', opacity: 0.9 }}>Únete a la comunidad y corre juntos. Meta: 100km</div>
+      {/* Featured Run Challenge Banner */}
+      <div
+        onClick={() => { setActiveApp('run'); setScreen('app'); }}
+        style={{
+          margin: '16px', padding: '20px', borderRadius: '12px', cursor: 'pointer', color: 'white',
+          background: 'linear-gradient(135deg, #3851d8 0%, #496be3 50%, #6f93eb 100%)',
+          boxShadow: 'var(--shadow-8dp)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+          <div style={{ width: '36px', height: '36px', borderRadius: '8px', backgroundColor: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+          </div>
+          <div style={{ fontSize: '16px', fontWeight: '600', letterSpacing: '0.2px' }}>Humand Run Challenge</div>
+        </div>
+        <div style={{ fontSize: '12px', opacity: 0.9, letterSpacing: '0.2px', lineHeight: '1.4' }}>Únete a la comunidad y corre juntos. Meta: 100km</div>
       </div>
 
-      <div style={{ padding: '24px 16px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px' }}>
+      {/* Mini-apps grid with SVG icons */}
+      <div style={{ padding: '8px 16px 24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
           {[
-            { name: 'Bienestar', emoji: '🧘', id: 'bienestar' },
-            { name: 'Cursos', emoji: '📚', id: 'courses' },
-            { name: 'Club', emoji: '🎁', id: 'club' },
-            { name: 'To Do List', emoji: '✅', id: 'todo' },
-            { name: 'Juegos', emoji: '🎮', id: 'juegos' },
-            { name: 'Salud', emoji: '🥗', id: 'health' },
-            { name: 'Comunidades', emoji: '👥', id: 'comunidades' },
-            { name: 'Finanzas', emoji: '💰', id: 'finanzas' },
-            { name: 'Humand Run', emoji: '🏃', id: 'run' },
+            { name: 'Bienestar', id: 'bienestar', color: '#35a48e', bg: '#d5f2e9',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#35a48e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> },
+            { name: 'Cursos', id: 'courses', color: '#496be3', bg: '#dee5fb',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#496be3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> },
+            { name: 'Club', id: 'club', color: '#e9582b', bg: '#fce7d8',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#e9582b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg> },
+            { name: 'To Do List', id: 'todo', color: '#28c040', bg: '#e6fbe9',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#28c040" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg> },
+            { name: 'Juegos', id: 'juegos', color: '#886bff', bg: '#e9e8ff',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#886bff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="11" x2="15.01" y2="11"/><line x1="18" y1="13" x2="18.01" y2="13"/></svg> },
+            { name: 'Salud', id: 'health', color: '#28c040', bg: '#e6fbe9',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#28c040" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> },
+            { name: 'Comunidades', id: 'comunidades', color: '#6f93eb', bg: '#eff2ff',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6f93eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
+            { name: 'Finanzas', id: 'finanzas', color: '#f0b623', bg: '#fdfaec',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f0b623" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> },
+            { name: 'Humand Run', id: 'run', color: '#496be3', bg: '#dee5fb',
+              svg: <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#496be3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="5" r="2"/><path d="M7 20l3-8"/><path d="M10.5 12L14 8l4 1"/><path d="M5.5 16l2.5-4 4 2"/></svg> },
           ].map((app) => (
             <div
               key={app.id}
-              onClick={() => {
-                setActiveApp(app.id as typeof activeApp);
-                setScreen('app');
-              }}
+              onClick={() => { setActiveApp(app.id as typeof activeApp); setScreen('app'); }}
               style={{
-                backgroundColor: 'white',
-                borderRadius: '8px',
-                padding: '16px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '8px',
-                cursor: 'pointer',
-                boxShadow: 'var(--shadow-4dp)',
+                backgroundColor: 'white', borderRadius: '12px', padding: '16px 8px',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px',
+                cursor: 'pointer', boxShadow: 'var(--shadow-4dp)',
               }}
             >
-              <div style={{ fontSize: '24px' }}>{app.emoji}</div>
-              <div style={{ fontSize: '12px', fontWeight: '500', color: 'var(--text-default)', textAlign: 'center' }}>{app.name}</div>
+              <div style={{
+                width: '48px', height: '48px', borderRadius: '12px', backgroundColor: app.bg,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                {app.svg}
+              </div>
+              <div style={{ fontSize: '12px', fontWeight: '500', color: 'var(--text-default)', textAlign: 'center', lineHeight: '1.4', letterSpacing: '0.2px' }}>{app.name}</div>
             </div>
           ))}
         </div>
@@ -697,7 +716,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>🧘 Bienestar</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>Bienestar</div>
             </div>
           </div>
 
@@ -767,7 +786,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>📚 Cursos</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>Cursos</div>
             </div>
           </div>
 
@@ -902,7 +921,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>🎁 Club de Beneficios</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>Club de Beneficios</div>
             </div>
           </div>
 
@@ -1014,7 +1033,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>✅ To Do List</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>To Do List</div>
             </div>
           </div>
 
@@ -1097,7 +1116,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>🎮 Juegos</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="11" x2="15.01" y2="11"/><line x1="18" y1="13" x2="18.01" y2="13"/></svg>Juegos</div>
             </div>
           </div>
 
@@ -1139,7 +1158,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>🥗 Salud</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>Salud</div>
             </div>
           </div>
 
@@ -1197,7 +1216,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>👥 Comunidades</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>Comunidades</div>
             </div>
           </div>
 
@@ -1237,7 +1256,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>💰 Finanzas</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Finanzas</div>
             </div>
           </div>
 
@@ -1293,7 +1312,7 @@ export default function Page() {
           <div style={{ backgroundColor: '#1d204e', paddingTop: '16px', paddingBottom: '16px', color: 'white' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', paddingLeft: '16px', paddingRight: '16px' }}>
               <ArrowLeft size={24} onClick={() => setScreen('community')} style={{ cursor: 'pointer' }} />
-              <div style={{ fontSize: '18px', fontWeight: '600' }}>🏃 Humand Run</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '18px', fontWeight: '600' }}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="5" r="2"/><path d="M7 20l3-8"/><path d="M10.5 12L14 8l4 1"/><path d="M5.5 16l2.5-4 4 2"/></svg>Humand Run</div>
             </div>
           </div>
 
