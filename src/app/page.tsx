@@ -107,6 +107,7 @@ interface RunActivity {
   duration: string;
   activity_date: string;
   created_at: string;
+  image_url?: string;
 }
 
 interface MoodEntry {
@@ -170,6 +171,9 @@ export default function Page() {
   const [runScope, setRunScope] = useState<'empresa' | 'pais' | 'global'>('empresa');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [showMoodToast, setShowMoodToast] = useState(false);
+  const [runImageFile, setRunImageFile] = useState<File | null>(null);
+  const [runImagePreview, setRunImagePreview] = useState<string | null>(null);
+  const [runUploading, setRunUploading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -253,7 +257,45 @@ export default function Page() {
     setCommunities(communities.map((c) => (c.id === id ? { ...c, joined: !joined } : c)));
   };
 
+  const handleRunImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setRunImageFile(file);
+      const reader = new FileReader();
+      reader.onloadend = () => setRunImagePreview(reader.result as string);
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveRunImage = () => {
+    setRunImageFile(null);
+    setRunImagePreview(null);
+  };
+
+  const uploadRunImage = async (file: File): Promise<string | null> => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const { error } = await supabase.storage
+      .from('run-images')
+      .upload(fileName, file);
+    if (error) {
+      console.error('Upload error:', error);
+      return null;
+    }
+    const { data: urlData } = supabase.storage
+      .from('run-images')
+      .getPublicUrl(fileName);
+    return urlData.publicUrl;
+  };
+
   const handleRegisterRun = async () => {
+    setRunUploading(true);
+    let imageUrl: string | null = null;
+
+    if (runImageFile) {
+      imageUrl = await uploadRunImage(runImageFile);
+    }
+
     const { data } = await supabase
       .from('run_activities')
       .insert([
@@ -262,6 +304,7 @@ export default function Page() {
           duration: runDuration,
           activity_date: runDate,
           created_at: new Date().toISOString(),
+          image_url: imageUrl,
         },
       ])
       .select();
@@ -269,8 +312,11 @@ export default function Page() {
     if (data) {
       setRunActivities([data[0], ...runActivities]);
       setRunSuccess(true);
-      setTimeout(() => setRunSuccess(false), 2000);
+      setRunImageFile(null);
+      setRunImagePreview(null);
+      setTimeout(() => setRunSuccess(false), 3000);
     }
+    setRunUploading(false);
   };
 
   const copyToClipboard = (code: string) => {
@@ -1163,10 +1209,10 @@ export default function Page() {
               <>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px', marginBottom: '24px' }}>
                   {[
-                    { label: 'KM Totales', value: '78.5km', icon: '🏃' },
-                    { label: 'Actividades', value: '23', icon: '⌚' },
+                    { label: 'KM Totales', value: `${totalKm.toFixed(1)}km`, icon: '🏃' },
+                    { label: 'Actividades', value: `${runActivities.length}`, icon: '⌚' },
                     { label: 'Ranking', value: '#5', icon: '🏆' },
-                    { label: 'Racha', value: '7 días', icon: '🔥' },
+                    { label: 'Racha', value: `${(() => { if (runActivities.length === 0) return '0'; const sorted = [...runActivities].sort((a, b) => new Date(b.activity_date).getTime() - new Date(a.activity_date).getTime()); let streak = 1; for (let i = 1; i < sorted.length; i++) { const prev = new Date(sorted[i - 1].activity_date); const curr = new Date(sorted[i].activity_date); const diff = (prev.getTime() - curr.getTime()) / (1000 * 60 * 60 * 24); if (diff <= 1.5) streak++; else break; } return streak; })()} días`, icon: '🔥' },
                   ].map((stat, idx) => (
                     <div key={idx} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '16px', boxShadow: 'var(--shadow-4dp)', textAlign: 'center' }}>
                       <div style={{ fontSize: '24px', marginBottom: '8px' }}>{stat.icon}</div>
@@ -1188,15 +1234,22 @@ export default function Page() {
 
                 <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '12px' }}>Actividades recientes</div>
                 {runActivities.slice(0, 5).map((activity, idx) => (
-                  <div key={idx} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '12px 16px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', boxShadow: 'var(--shadow-4dp)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ fontSize: '20px' }}>🏃</div>
-                      <div>
-                        <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-default)' }}>{activity.km}km</div>
-                        <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{formatDate(activity.activity_date)}</div>
+                  <div key={idx} style={{ backgroundColor: 'white', borderRadius: '8px', padding: '12px 16px', marginBottom: '8px', boxShadow: 'var(--shadow-4dp)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ fontSize: '20px' }}>🏃</div>
+                        <div>
+                          <div style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-default)' }}>{activity.km}km</div>
+                          <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{formatDate(activity.activity_date)}</div>
+                        </div>
                       </div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{activity.duration}</div>
                     </div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>{activity.duration}</div>
+                    {activity.image_url && (
+                      <div style={{ marginTop: '8px', borderRadius: '8px', overflow: 'hidden' }}>
+                        <img src={activity.image_url} alt="Run" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '8px' }} />
+                      </div>
+                    )}
                   </div>
                 ))}
               </>
@@ -1333,22 +1386,76 @@ export default function Page() {
                       />
                     </div>
 
+                    {/* Image attachment section */}
+                    <div style={{ marginBottom: '24px' }}>
+                      <div style={{ fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '8px' }}>Adjuntar foto (opcional)</div>
+                      {!runImagePreview ? (
+                        <label style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '8px',
+                          padding: '16px',
+                          border: '2px dashed var(--neutral-200)',
+                          borderRadius: '8px',
+                          cursor: 'pointer',
+                          backgroundColor: 'var(--neutral-50)',
+                          transition: 'border-color 0.2s',
+                        }}>
+                          <span style={{ fontSize: '20px' }}>📷</span>
+                          <span style={{ fontSize: '14px', color: 'var(--text-lighter)' }}>Seleccionar imagen</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleRunImageSelect}
+                            style={{ display: 'none' }}
+                          />
+                        </label>
+                      ) : (
+                        <div style={{ position: 'relative', borderRadius: '8px', overflow: 'hidden' }}>
+                          <img src={runImagePreview} alt="Preview" style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '8px' }} />
+                          <button
+                            onClick={handleRemoveRunImage}
+                            style={{
+                              position: 'absolute',
+                              top: '8px',
+                              right: '8px',
+                              width: '28px',
+                              height: '28px',
+                              borderRadius: '999px',
+                              backgroundColor: 'rgba(0,0,0,0.6)',
+                              color: 'white',
+                              border: 'none',
+                              fontSize: '14px',
+                              cursor: 'pointer',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            }}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      )}
+                    </div>
+
                     {!runSuccess ? (
                       <button
                         onClick={handleRegisterRun}
+                        disabled={runUploading}
                         style={{
                           width: '100%',
-                          backgroundColor: 'var(--humand-500)',
+                          backgroundColor: runUploading ? 'var(--neutral-300)' : 'var(--humand-500)',
                           color: 'white',
                           border: 'none',
                           padding: '12px',
                           borderRadius: '8px',
                           fontWeight: '600',
                           fontSize: '14px',
-                          cursor: 'pointer',
+                          cursor: runUploading ? 'not-allowed' : 'pointer',
                         }}
                       >
-                        🏃 Registrar {runKm.toFixed(1)}km
+                        {runUploading ? '⏳ Subiendo...' : `🏃 Registrar ${runKm.toFixed(1)}km`}
                       </button>
                     ) : (
                       <div style={{ backgroundColor: 'var(--green-600)', color: 'white', padding: '12px', borderRadius: '8px', textAlign: 'center', fontWeight: '600' }}>
@@ -1357,9 +1464,125 @@ export default function Page() {
                     )}
                   </>
                 ) : (
-                  <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '32px 16px', textAlign: 'center', boxShadow: 'var(--shadow-4dp)' }}>
-                    <div style={{ fontSize: '48px', marginBottom: '16px' }}>📷</div>
-                    <div style={{ fontSize: '14px', color: 'var(--text-lighter)' }}>Cargando desde foto</div>
+                  /* FOTO MODE — upload image and auto-detect (manual entry as fallback) */
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div style={{ backgroundColor: 'white', borderRadius: '8px', padding: '16px', boxShadow: 'var(--shadow-4dp)' }}>
+                      <div style={{ fontSize: '14px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '4px' }}>Subí la captura de tu app de running</div>
+                      <div style={{ fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '16px' }}>Strava, Nike Run Club, Apple Health, etc.</div>
+
+                      {!runImagePreview ? (
+                        <label style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '12px',
+                          padding: '32px 16px',
+                          border: '2px dashed var(--humand-400)',
+                          borderRadius: '12px',
+                          cursor: 'pointer',
+                          backgroundColor: 'var(--humand-50)',
+                        }}>
+                          <div style={{ width: '56px', height: '56px', borderRadius: '999px', backgroundColor: 'var(--humand-100)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>📷</div>
+                          <span style={{ fontSize: '14px', fontWeight: '600', color: 'var(--humand-500)' }}>Tomar foto o elegir de galería</span>
+                          <span style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>JPG, PNG — máx. 10MB</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            capture="environment"
+                            onChange={handleRunImageSelect}
+                            style={{ display: 'none' }}
+                          />
+                        </label>
+                      ) : (
+                        <div>
+                          <div style={{ position: 'relative', borderRadius: '12px', overflow: 'hidden', marginBottom: '16px' }}>
+                            <img src={runImagePreview} alt="Captura" style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                            <button
+                              onClick={handleRemoveRunImage}
+                              style={{
+                                position: 'absolute',
+                                top: '8px',
+                                right: '8px',
+                                width: '32px',
+                                height: '32px',
+                                borderRadius: '999px',
+                                backgroundColor: 'rgba(0,0,0,0.6)',
+                                color: 'white',
+                                border: 'none',
+                                fontSize: '16px',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </div>
+
+                          <div style={{ fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '8px' }}>Completá los datos de tu actividad:</div>
+
+                          <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '4px' }}>KM</div>
+                              <input
+                                type="number"
+                                step="0.1"
+                                min="0"
+                                value={runKm}
+                                onChange={(e) => setRunKm(parseFloat(e.target.value) || 0)}
+                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--neutral-200)', fontSize: '14px' }}
+                              />
+                            </div>
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '4px' }}>Duración</div>
+                              <input
+                                type="text"
+                                placeholder="00:30"
+                                value={runDuration}
+                                onChange={(e) => setRunDuration(e.target.value)}
+                                style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--neutral-200)', fontSize: '14px' }}
+                              />
+                            </div>
+                          </div>
+
+                          <div style={{ marginBottom: '16px' }}>
+                            <div style={{ fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '4px' }}>Fecha</div>
+                            <input
+                              type="date"
+                              value={runDate}
+                              onChange={(e) => setRunDate(e.target.value)}
+                              style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid var(--neutral-200)', fontSize: '14px' }}
+                            />
+                          </div>
+
+                          {!runSuccess ? (
+                            <button
+                              onClick={handleRegisterRun}
+                              disabled={runUploading}
+                              style={{
+                                width: '100%',
+                                backgroundColor: runUploading ? 'var(--neutral-300)' : 'var(--humand-500)',
+                                color: 'white',
+                                border: 'none',
+                                padding: '12px',
+                                borderRadius: '8px',
+                                fontWeight: '600',
+                                fontSize: '14px',
+                                cursor: runUploading ? 'not-allowed' : 'pointer',
+                              }}
+                            >
+                              {runUploading ? '⏳ Subiendo foto y registrando...' : `🏃 Registrar ${runKm.toFixed(1)}km con foto`}
+                            </button>
+                          ) : (
+                            <div style={{ backgroundColor: 'var(--green-600)', color: 'white', padding: '12px', borderRadius: '8px', textAlign: 'center', fontWeight: '600' }}>
+                              ✓ ¡Actividad registrada con foto!
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   </div>
                 )}
               </>
