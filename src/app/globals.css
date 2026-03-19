@@ -1,0 +1,76 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap');
+
+:root {
+  /* Humand Brand */
+  --humand-50: #f1f4fd;
+  --humand-100: #dee5fb;
+  --humand-200: #c5d4f8;
+  --humand-300: #9db8f3;
+  --humand-400: #6f93eb;
+  --humand-500: #496be3;
+  --humand-600: #3851d8;
+  --humand-700: #2f3fc6;
+  --humand-800: #2c35a1;
+  --humand-900: #29317f;
+  --humand-950: #1d204e;
+
+  /* Neutral */
+  --neutral-50: #f5f6f8;
+  --neutral-100: #eeeef1;
+  --neutral-150: #E9E9ED;
+  --neutral-200: #dfe0e6;
+  --neutral-300: #cbcdd6;
+  --neutral-400: #b5b6c4;
+  --neutral-500: #aaaaba;
+  --neutral-600: #8d8c9f;
+  --neutral-700: #79788a;
+  --neutral-800: #636271;
+  --neutral-900: #53525d;
+  --neutral-950: #303036;
+
+  /* Semantic */
+  --text-default: #303036;
+  --text-lighter: #636271;
+  --brand-400: #6f93eb;
+  --bg-layout: #f5f6f8;
+  --blueprimary-100: #eff2ff;
+  --blueprimary-800: #213478;
+
+  /* Success */
+  --green-500: #4ed364;
+  --green-600: #28c040;
+  --green-700: #249637;
+
+  /* Error */
+  --red-500: #e74444;
+  --red-600: #d42e2e;
+
+  /* Warning */
+  --yellow-500: #f0b623;
+
+  /* Elevation */
+  --shadow-4dp: -1px 4px 8px 0px rgba(233,233,244,1);
+  --shadow-8dp: -1px 8px 16px 0px rgba(170,170,186,0.45);
+  --shadow-inverted: 0px -2px 24px 0px rgba(103,103,121,0.50);
+}
+
+@theme inline {
+  --color-background: var(--bg-layout);
+  --color-foreground: var(--text-default);
+  --font-sans: 'Roboto', sans-serif;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+  color: var(--text-default);
+  background: var(--bg-layout);
+  -webkit-font-smoothing: antialiased;
+}
