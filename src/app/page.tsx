@@ -333,78 +333,143 @@ export default function Page() {
   ];
 
   const renderMuro = () => (
-    <div style={{ backgroundColor: 'var(--bg-layout)' }} className="min-h-screen">
-      <div style={{ backgroundColor: 'white', paddingTop: '16px', paddingBottom: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '16px', paddingRight: '16px' }}>
-          <div style={{ fontSize: '24px', fontWeight: '600', color: 'var(--text-default)' }}>humand</div>
-          <div style={{ display: 'flex', gap: '12px', color: 'var(--text-lighter)' }}>
-            <Clock size={20} />
-            <Search size={20} />
-            <Bell size={20} />
+    <div style={{ backgroundColor: 'white', minHeight: '100vh' }}>
+      {/* Header */}
+      <div style={{ backgroundColor: 'white', paddingTop: '12px', paddingBottom: '0' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingLeft: '16px', paddingRight: '16px', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+            <span style={{ fontSize: '24px', fontWeight: '600', color: 'var(--humand-950)', letterSpacing: '-0.5px' }}>humand</span>
+          </div>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+            <Clock size={22} color="var(--humand-950)" strokeWidth={1.5} />
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--humand-950)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16v16H4z" rx="2"/><path d="M9 9h6"/><path d="M9 13h6"/><path d="M9 17h4"/></svg>
+            <Search size={22} color="var(--humand-950)" strokeWidth={1.5} />
+            <Bell size={22} color="var(--humand-950)" strokeWidth={1.5} />
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: '12px', marginTop: '16px', paddingLeft: '16px', overflowX: 'auto', paddingRight: '16px' }}>
-          <div style={{ padding: '8px 16px', backgroundColor: 'var(--humand-500)', color: 'white', borderRadius: '999px', fontSize: '14px', fontWeight: '500', whiteSpace: 'nowrap' }}>
-            Muro
-          </div>
-          <div style={{ padding: '8px 16px', backgroundColor: 'white', color: 'var(--text-lighter)', borderRadius: '999px', fontSize: '14px', fontWeight: '500', border: '1px solid var(--neutral-100)', whiteSpace: 'nowrap' }}>
-            Grupos
-          </div>
-          <div style={{ padding: '8px 16px', backgroundColor: 'white', color: 'var(--text-lighter)', borderRadius: '999px', fontSize: '14px', fontWeight: '500', border: '1px solid var(--neutral-100)', whiteSpace: 'nowrap' }}>
-            Noticias
-          </div>
-          <div style={{ padding: '8px 16px', backgroundColor: 'white', color: 'var(--text-lighter)', borderRadius: '999px', fontSize: '14px', fontWeight: '500', border: '1px solid var(--neutral-100)', position: 'relative', whiteSpace: 'nowrap' }}>
-            Marketplace
-            <span style={{ position: 'absolute', top: '4px', right: '8px', backgroundColor: 'var(--red-500)', color: 'white', borderRadius: '50%', width: '20px', height: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: '600' }}>
-              7
-            </span>
-          </div>
+        {/* Tab pills — matching screenshot: outlined rounded pills */}
+        <div style={{ display: 'flex', gap: '8px', paddingLeft: '16px', paddingRight: '16px', paddingBottom: '12px', borderBottom: '1px solid var(--neutral-100)' }}>
+          {[
+            { label: 'Muro', active: true },
+            { label: 'Grupos', active: false },
+            { label: 'Noticias', active: false },
+            { label: 'Marketplace', active: false, badge: '7' },
+          ].map((pill) => (
+            <div
+              key={pill.label}
+              style={{
+                padding: '6px 16px',
+                borderRadius: '999px',
+                fontSize: '14px',
+                fontWeight: pill.active ? '600' : '400',
+                color: pill.active ? 'var(--humand-950)' : 'var(--text-lighter)',
+                border: `1.5px solid ${pill.active ? 'var(--humand-950)' : 'var(--neutral-200)'}`,
+                backgroundColor: 'white',
+                whiteSpace: 'nowrap',
+                position: 'relative',
+                letterSpacing: '0.2px',
+                lineHeight: '1.4',
+              }}
+            >
+              {pill.label}
+              {pill.badge && (
+                <span style={{
+                  position: 'absolute', top: '-6px', right: '-6px',
+                  backgroundColor: '#e74444', color: 'white', borderRadius: '999px',
+                  minWidth: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: '10px', fontWeight: '600', border: '2px solid white',
+                }}>
+                  {pill.badge}
+                </span>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 
-      <div style={{ padding: '16px', backgroundColor: 'white', marginTop: '8px', marginLeft: '16px', marginRight: '16px', borderRadius: '8px', display: 'flex', gap: '12px', alignItems: 'center', boxShadow: 'var(--shadow-4dp)' }}>
-        <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--humand-100)', flexShrink: 0 }} />
-        <div style={{ color: 'var(--text-lighter)', fontSize: '14px', flex: 1 }}>¿Qué estás pensando?</div>
-      </div>
-
-      <div style={{ marginTop: '16px', paddingBottom: '80px' }}>
+      {/* Posts */}
+      <div style={{ paddingBottom: '80px' }}>
         {posts.slice(0, 5).map((post) => (
-          <div key={post.id} style={{ backgroundColor: 'white', marginLeft: '16px', marginRight: '16px', marginBottom: '8px', padding: '16px', borderRadius: '8px', boxShadow: 'var(--shadow-4dp)' }}>
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '12px' }}>
-              <div style={{ width: '40px', height: '40px', borderRadius: '50%', backgroundColor: 'var(--humand-100)', flexShrink: 0 }} />
+          <div key={post.id} style={{ backgroundColor: 'white', padding: '16px', borderBottom: '1px solid var(--neutral-100)' }}>
+            {/* Author row */}
+            <div style={{ display: 'flex', gap: '12px', marginBottom: '12px', alignItems: 'flex-start' }}>
+              {post.author_avatar ? (
+                <img src={post.author_avatar} alt="" style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+              ) : (
+                <div style={{ width: '44px', height: '44px', borderRadius: '50%', backgroundColor: 'var(--humand-100)', flexShrink: 0 }} />
+              )}
               <div style={{ flex: 1 }}>
-                <div style={{ fontWeight: '600', color: 'var(--text-default)', fontSize: '14px' }}>{post.author_name}</div>
-                <div style={{ color: 'var(--text-lighter)', fontSize: '12px' }}>{formatRelativeTime(post.created_at)}</div>
+                <div style={{ fontWeight: '600', color: 'var(--text-default)', fontSize: '14px', lineHeight: '1.4', letterSpacing: '0.2px' }}>{post.author_name}</div>
+                <div style={{ color: 'var(--text-lighter)', fontSize: '12px', lineHeight: '1.4', letterSpacing: '0.2px' }}>{formatRelativeTime(post.created_at)}</div>
+              </div>
+              <div style={{ color: 'var(--text-lighter)', cursor: 'pointer', fontSize: '18px', lineHeight: 1 }}>•••</div>
+            </div>
+
+            {/* Content */}
+            <div style={{ color: 'var(--text-default)', fontSize: '14px', lineHeight: '1.4', letterSpacing: '0.2px', marginBottom: '8px' }}>{post.content}</div>
+
+            {/* "Ver traducción" link */}
+            <div style={{ color: 'var(--text-lighter)', fontSize: '12px', marginBottom: '12px', letterSpacing: '0.2px' }}>Ver traducción</div>
+
+            {/* Reactions row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', marginBottom: '12px' }}>
+              {post.reactions?.heart > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '16px' }}>❤️</span>
+                  <span style={{ fontSize: '14px', color: 'var(--text-default)', letterSpacing: '0.2px' }}>{post.reactions.heart}</span>
+                </div>
+              )}
+              {post.reactions?.thumbsup > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '16px' }}>👍</span>
+                  <span style={{ fontSize: '14px', color: 'var(--text-default)', letterSpacing: '0.2px' }}>{post.reactions.thumbsup}</span>
+                </div>
+              )}
+              {post.reactions?.star > 0 && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '16px' }}>🤩</span>
+                  <span style={{ fontSize: '14px', color: 'var(--text-default)', letterSpacing: '0.2px' }}>{post.reactions.star}</span>
+                </div>
+              )}
+              <div style={{ marginLeft: 'auto', color: 'var(--text-lighter)', fontSize: '12px' }}>Ver todo</div>
+            </div>
+
+            {/* Comment/actions bar */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '8px', borderTop: '1px solid var(--neutral-100)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-default)', fontSize: '12px', fontWeight: '400', letterSpacing: '0.2px' }}>
+                <MessageCircle size={16} color="var(--text-default)" />
+                Comentar
+              </div>
+              <div style={{ color: 'var(--text-lighter)', fontSize: '12px', letterSpacing: '0.2px' }}>
+                {(comments[post.id]?.length || 0)} Comentarios
               </div>
             </div>
 
-            <div style={{ color: 'var(--text-default)', fontSize: '14px', lineHeight: '1.5', marginBottom: '12px' }}>{post.content}</div>
-
-            <div style={{ display: 'flex', gap: '16px', fontSize: '12px', color: 'var(--text-lighter)', marginBottom: '12px', paddingBottom: '12px', borderBottom: '1px solid var(--neutral-100)' }}>
-              {post.reactions?.['❤️'] && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <span>❤️</span>
-                  <span>{post.reactions['❤️']}</span>
-                </div>
-              )}
-              {post.reactions?.['👍'] && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <span>👍</span>
-                  <span>{post.reactions['👍']}</span>
-                </div>
-              )}
-              {post.reactions?.['🤩'] && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                  <span>🤩</span>
-                  <span>{post.reactions['🤩']}</span>
-                </div>
-              )}
-              <div style={{ marginLeft: 'auto' }}>{(comments[post.id]?.length || 0)} comentarios</div>
-            </div>
-
+            {/* Inline comments */}
             {(comments[post.id]?.length || 0) > 0 && (
-              <div style={{ fontSize: '12px', color: 'var(--humand-500)', fontWeight: '600', cursor: 'pointer' }}>Ver todo ({comments[post.id]?.length || 0})</div>
+              <div style={{ marginTop: '12px' }}>
+                {comments[post.id]?.slice(0, 2).map((comment) => (
+                  <div key={comment.id} style={{ display: 'flex', gap: '10px', marginBottom: '12px', paddingLeft: '4px' }}>
+                    {comment.author_avatar ? (
+                      <img src={comment.author_avatar} alt="" style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
+                    ) : (
+                      <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: 'var(--neutral-100)', flexShrink: 0 }} />
+                    )}
+                    <div style={{ flex: 1, backgroundColor: 'var(--neutral-50)', borderRadius: '8px', padding: '10px 12px' }}>
+                      <div style={{ fontWeight: '600', fontSize: '12px', color: 'var(--text-default)', marginBottom: '2px', letterSpacing: '0.2px' }}>{comment.author_name}</div>
+                      <div style={{ fontSize: '14px', color: 'var(--text-default)', lineHeight: '1.4', letterSpacing: '0.2px' }}>{comment.content}</div>
+                      <div style={{ display: 'flex', gap: '12px', marginTop: '6px', alignItems: 'center' }}>
+                        <span style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>👍 {comment.likes || 0}</span>
+                        <span style={{ fontSize: '12px', color: 'var(--text-lighter)' }}>💬</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div style={{ textAlign: 'right', fontSize: '12px', color: 'var(--humand-500)', fontWeight: '600', cursor: 'pointer', letterSpacing: '0.2px' }}>
+                  Responder
+                </div>
+              </div>
             )}
           </div>
         ))}
@@ -412,90 +477,145 @@ export default function Page() {
     </div>
   );
 
-  const renderApps = () => (
-    <div style={{ backgroundColor: 'var(--bg-layout)', minHeight: '100vh', paddingBottom: '80px' }}>
-      <div style={{ padding: '24px 16px' }}>
-        <div style={{ fontSize: '32px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '24px' }}>Apps</div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
-          {[
-            { name: 'Personas', emoji: '👥' },
-            { name: 'Control horario', emoji: '⏱️' },
-            { name: 'Marcajes', emoji: '✓' },
-            { name: 'Organigrama', emoji: '📊' },
-            { name: 'Onboarding', emoji: '🟢', label: 'verde' },
-            { name: 'Onboarding', emoji: '🟣', badge: 'Nuevo', label: 'purple' },
-            { name: 'Encuestas', emoji: '📋' },
-            { name: 'Marketplace', emoji: '🛍️', badge: '7' },
-            { name: 'Vacaciones', emoji: '🏖️' },
-            { name: 'Aprendizaje', emoji: '📚' },
-            { name: 'Eventos', emoji: '🎉' },
-            { name: 'Librerías', emoji: '📖' },
-            { name: 'Tareas', emoji: '☑️' },
-            { name: 'Landing', emoji: '🚀' },
-            { name: 'Notion', emoji: '📝' },
-            { name: 'Humand Community', emoji: '🌍', badge: '🔴' },
-          ].map((app, idx) => (
-            <div
-              key={idx}
-              onClick={() => {
-                if (app.name === 'Humand Community') {
-                  setScreen('community');
-                  setActiveTab('community');
-                }
-              }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: '8px',
-                cursor: app.name === 'Humand Community' ? 'pointer' : 'default',
-                position: 'relative',
-              }}
-            >
-              <div
-                style={{
-                  width: '64px',
-                  height: '64px',
-                  backgroundColor: app.name === 'Humand Community' ? 'var(--humand-500)' : 'white',
-                  borderRadius: '16px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '28px',
-                  boxShadow: 'var(--shadow-4dp)',
-                }}
-              >
-                {app.emoji}
-              </div>
-              {app.badge && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '4px',
-                    right: '4px',
-                    backgroundColor: app.badge === '🔴' || app.badge === '7' ? 'var(--red-500)' : 'var(--green-600)',
-                    color: 'white',
-                    borderRadius: '50%',
-                    width: app.badge === '7' ? '20px' : '16px',
-                    height: app.badge === '7' ? '20px' : '16px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: app.badge === '7' ? '10px' : '8px',
-                    fontWeight: '600',
-                  }}
-                >
-                  {app.badge === '🔴' ? '●' : app.badge}
-                </div>
-              )}
-              <div style={{ fontSize: '12px', color: 'var(--text-default)', textAlign: 'center', fontWeight: '500' }}>{app.name}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+  const AppIcon = ({ children, color = '#6f93eb', bg = '#eff2ff' }: { children: React.ReactNode; color?: string; bg?: string }) => (
+    <div style={{
+      width: '64px', height: '64px', borderRadius: '16px',
+      backgroundColor: bg, display: 'flex', alignItems: 'center', justifyContent: 'center',
+      boxShadow: 'var(--shadow-4dp)',
+    }}>
+      {children}
     </div>
   );
+
+  const renderApps = () => {
+    const appItems: Array<{
+      name: string;
+      icon: React.ReactNode;
+      badge?: string;
+      badgeColor?: string;
+      badgeBg?: string;
+      action?: () => void;
+    }> = [
+      {
+        name: 'Personas',
+        icon: <AppIcon><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6f93eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></AppIcon>,
+      },
+      {
+        name: 'Control horario',
+        icon: <AppIcon color="#28c040" bg="#e6fbe9"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#28c040" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></AppIcon>,
+      },
+      {
+        name: 'Marcajes',
+        icon: <AppIcon color="#496be3" bg="#dee5fb"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#496be3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></AppIcon>,
+      },
+      {
+        name: 'Organigrama',
+        icon: <AppIcon color="#6f93eb" bg="#eff2ff"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6f93eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="5" rx="1"/><path d="M12 8v4"/><path d="M6 16h4"/><path d="M14 16h4"/><path d="M6 12h12"/><path d="M8 12v4"/><path d="M16 12v4"/></svg></AppIcon>,
+      },
+      {
+        name: 'Onboarding',
+        icon: <AppIcon color="#28c040" bg="#e6fbe9"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#28c040" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h8"/><path d="M8 14h4"/></svg></AppIcon>,
+      },
+      {
+        name: 'Onboarding',
+        icon: <AppIcon color="#886bff" bg="#e9e8ff"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#886bff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg></AppIcon>,
+        badge: 'Nuevo', badgeColor: '#28c040', badgeBg: '#e6fbe9',
+      },
+      {
+        name: 'Encuestas',
+        icon: <AppIcon color="#886bff" bg="#f4f2ff"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#886bff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></AppIcon>,
+      },
+      {
+        name: 'Marketplace',
+        icon: <AppIcon color="#e74444" bg="#fde3e3"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e74444" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></AppIcon>,
+        badge: '7',
+      },
+      {
+        name: 'Vacaciones y\npermisos',
+        icon: <AppIcon color="#6f93eb" bg="#eff2ff"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6f93eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></AppIcon>,
+      },
+      {
+        name: 'Aprendizaje',
+        icon: <AppIcon color="#35a48e" bg="#d5f2e9"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#35a48e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 1.66 2.69 3 6 3s6-1.34 6-3v-5"/></svg></AppIcon>,
+      },
+      {
+        name: 'Eventos',
+        icon: <AppIcon color="#e9582b" bg="#fce7d8"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e9582b" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/></svg></AppIcon>,
+      },
+      {
+        name: 'Librerías',
+        icon: <AppIcon color="#496be3" bg="#dee5fb"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#496be3" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></AppIcon>,
+      },
+      {
+        name: 'Tareas',
+        icon: <AppIcon color="#6f93eb" bg="#eff2ff"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6f93eb" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></AppIcon>,
+      },
+      {
+        name: 'Landing',
+        icon: <AppIcon color="#303036" bg="#eeeef1"><div style={{ fontSize: '18px', fontWeight: '600', color: '#303036', fontFamily: 'Roboto, sans-serif' }}>hu</div></AppIcon>,
+      },
+      {
+        name: 'Notion',
+        icon: <AppIcon color="#303036" bg="#eeeef1"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#303036" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16v16H4z"/><path d="M8 4v16"/><path d="M12 8h4"/><path d="M12 12h4"/><path d="M12 16h2"/></svg></AppIcon>,
+      },
+      {
+        name: 'Humand\nCommunity',
+        icon: <AppIcon color="white" bg="#496be3"><Globe size={28} color="white" /></AppIcon>,
+        action: () => { setScreen('community'); setActiveTab('community'); },
+      },
+    ];
+
+    return (
+      <div style={{ backgroundColor: 'var(--bg-layout)', minHeight: '100vh', paddingBottom: '80px' }}>
+        <div style={{ padding: '24px 16px 16px' }}>
+          <div style={{ fontSize: '32px', fontWeight: '600', color: 'var(--text-default)', marginBottom: '24px', lineHeight: '1.3', letterSpacing: '0.2px' }}>Apps</div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px 16px' }}>
+            {appItems.map((app, idx) => (
+              <div
+                key={idx}
+                onClick={app.action}
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px',
+                  cursor: app.action ? 'pointer' : 'default', position: 'relative',
+                }}
+              >
+                {app.icon}
+                {app.badge === '7' && (
+                  <div style={{
+                    position: 'absolute', top: '-2px', right: '12px',
+                    backgroundColor: '#e74444', color: 'white', borderRadius: '999px',
+                    minWidth: '18px', height: '18px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '10px', fontWeight: '600', padding: '0 5px',
+                    border: '2px solid var(--bg-layout)',
+                  }}>
+                    7
+                  </div>
+                )}
+                {app.badge === 'Nuevo' && (
+                  <div style={{
+                    position: 'absolute', top: '-4px', right: '2px',
+                    backgroundColor: '#e6fbe9', color: '#28c040', borderRadius: '4px',
+                    fontSize: '9px', fontWeight: '600', padding: '2px 5px',
+                    letterSpacing: '0.2px',
+                  }}>
+                    Nuevo
+                  </div>
+                )}
+                <div style={{
+                  fontSize: '12px', color: 'var(--text-default)', textAlign: 'center',
+                  lineHeight: '1.4', letterSpacing: '0.2px', whiteSpace: 'pre-line',
+                  maxWidth: '80px',
+                }}>
+                  {app.name}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   const renderCommunityHub = () => (
     <div style={{ backgroundColor: 'var(--bg-layout)', minHeight: '100vh', paddingBottom: '80px' }}>
@@ -1775,6 +1895,7 @@ export default function Page() {
         {screen === 'app' && renderAppScreen()}
       </div>
 
+      {/* Bottom Tab Bar — matches screenshot exactly */}
       <div
         style={{
           position: 'fixed',
@@ -1783,23 +1904,23 @@ export default function Page() {
           maxWidth: '390px',
           display: 'flex',
           justifyContent: 'space-around',
-          alignItems: 'center',
+          alignItems: 'flex-start',
           backgroundColor: 'white',
-          borderTop: '1px solid var(--neutral-100)',
-          paddingTop: '8px',
-          paddingBottom: '8px',
-          height: '64px',
+          borderTop: '1px solid var(--neutral-150)',
+          paddingTop: '10px',
+          paddingBottom: '12px',
+          boxShadow: 'var(--shadow-inverted)',
         }}
       >
         {[
-          { icon: Home, label: 'Inicio', value: 'muro' },
-          { icon: MessageSquare, label: 'Chats', value: null },
-          { icon: LayoutGrid, label: 'Apps', value: 'apps' },
-          { icon: Star, label: 'Nuestra...', value: null },
-          { icon: User, label: 'Perfil', value: null },
+          { label: 'Inicio', value: 'muro', icon: (c: string) => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> },
+          { label: 'Chats', value: null, icon: (c: string) => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> },
+          { label: 'Apps', value: 'apps', icon: (c: string) => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg> },
+          { label: 'Nuestra...', value: null, icon: (c: string) => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg> },
+          { label: 'Perfil', value: null, icon: (c: string) => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> },
         ].map((tab, idx) => {
           const isActive = activeTab === tab.value;
-          const Icon = tab.icon;
+          const color = isActive ? '#496be3' : '#8d8c9f';
 
           return (
             <div
@@ -1815,31 +1936,18 @@ export default function Page() {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                justifyContent: 'center',
                 gap: '4px',
                 cursor: tab.value ? 'pointer' : 'default',
-                opacity: tab.value ? 1 : 0.5,
-                position: 'relative',
+                opacity: tab.value ? 1 : 0.6,
               }}
             >
-              <Icon size={24} color={isActive ? 'var(--humand-500)' : 'var(--text-lighter)'} />
-              {isActive && (
-                <div
-                  style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    backgroundColor: 'var(--humand-500)',
-                  }}
-                />
-              )}
-              <div
-                style={{
-                  fontSize: '10px',
-                  color: isActive ? 'var(--humand-500)' : 'var(--text-lighter)',
-                  textAlign: 'center',
-                }}
-              >
+              {tab.icon(color)}
+              <div style={{
+                fontSize: '10px',
+                color: color,
+                letterSpacing: '0.2px',
+                fontWeight: isActive ? '600' : '400',
+              }}>
                 {tab.label}
               </div>
             </div>
